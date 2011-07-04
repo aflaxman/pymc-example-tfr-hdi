@@ -35,7 +35,8 @@ def nonlinear():
 
     @mc.deterministic
     def y_pred(beta=beta, gamma=gamma, X=data.hdi):
-        return beta[0] + beta[1]*X + pl.maximum(0., beta[2]*(X-gamma))
+        return beta[0] + beta[1]*X \
+            + pl.maximum(0., beta[2]*(X-gamma))
     y_obs = mc.Normal('y_obs', value=data.tfr,
                       mu=y_pred, tau=sigma**-2,
                       observed=True)
