@@ -4,8 +4,9 @@
 import matplotlib
 matplotlib.use("AGG") 
 
-import models
 import data
+import models
+import graphics
 
 class TestClass:
     def setUp(self):
@@ -18,4 +19,5 @@ class TestClass:
         vars = models.linear()
         assert 'beta' in vars
 
-        
+    def test_graphics(self):
+        graphics.plot_all_data()

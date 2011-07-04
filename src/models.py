@@ -14,11 +14,15 @@ def linear():
     def y_pred(beta=beta, X=data.hdi):
         return beta[0] + beta[1]*X
     y_obs = mc.Normal('y_obs', value=data.tfr,
-                      mu=y_pred, tau=sigma**-2)
+                      mu=y_pred, tau=sigma**-2, observed=True)
 
     return vars()
 
 def fit_linear():
-    m = mc.MCMC(linear())
-    m.sample(iter=100000, burn=50000, thin=50)
+    vars = linear()
+
+    mc.MAP(vars).fit(method='fmin_powell', verbose=1)
+
+    m = mc.MCMC(vars)
+    m.sample(iter=10000, burn=5000, thin=5)
     return m
