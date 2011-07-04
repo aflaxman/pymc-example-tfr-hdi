@@ -129,7 +129,7 @@
 %%                                          %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{A sample article title}
+\title{An example Bayesian data analysis with PyMC:\\The TFR-HDI controversy}
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -145,15 +145,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\author{Charles A Darwin\correspondingauthor$^{1,2}$%
-       \email{Charles A Darwin\correspondingauthor - charles@londonzoo.co.uk}%
-      \and
-         Jane E Doe\correspondingauthor$^2$%
-         \email{Jane E Doe\correspondingauthor - jane.e.doe@cambridge.co.uk}
-       and 
-         John RS Smith$^3$%
-         \email{John RS Smith - john.RS.Smith@cambridge.co.uk}%
-      }
+\author{Abraham D Flaxman\correspondingauthor$^{1}$%
+       \email{Abraham D Flaxman\correspondingauthor - abie@uw.edu}%
+}
       
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,11 +157,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \address{%
-    \iid(1)Life Sciences Department, Kings College London, Cornwall House,%
-        Waterloo Road, London, UK\\
-    \iid(2)Department of Zoology, Cambridge, Waterloo Road, London, UK\\
-    \iid(3)Marine Ecology Department, Institute of Marine Sciences Kiel, %
-        D\"{u}sternbrooker Weg 20, 24105 Kiel, Germany
+    \iid(1)Institute for Health Metrics and Evaluation, Dept of Global Health, Univ of Washington, Seattle, WA USA
 }%
 
 \maketitle
@@ -202,13 +192,13 @@
 
 \begin{abstract}
         % Do not use inserted blank lines (ie \\) until main body of text.
-        \paragraph*{Background:} Text for this section of the abstract. 
+        \paragraph*{Background:} Bayesian data analysis is an important tool, but has a steep learning curve. This document provides a rapid introduction through a complete example.
       
-        \paragraph*{Methods:} Text for this section of the abstract \ldots
+        \paragraph*{Methods:} I replicated several analyses of the relationship between Human Development Index (HDI) and Total Fertility Rate (TFR) using the PyMC package for Python.
 
-        \paragraph*{Results:} Text for this section of the abstract \ldots
+        \paragraph*{Results:} PyMC provided a simple framework for replicating and extending statistical data analysis in a Bayesian framework.
 
-        \paragraph*{Conclusions:} Text for this section of the abstract \ldots
+        \paragraph*{Conclusions:} I hope that this document helps others quickly get started with their own Bayesian data analysis in PyMC.
 \end{abstract}
 
 
@@ -259,8 +249,79 @@
 %% statement of what is being reported in the article.
 
 \section*{Background}
- Text for this section.\cite{koon,oreg,khar,zvai,xjon,schn,pond,smith,marg,hunn,advi,koha,mouse}
+Bayesian data analysis is an important tool, but it has a steep
+learning curve.  MCMC packages like BUGS and PyMC can reduce the
+barrier to entry significantly, by removing the burden of coding an
+MCMC sampler (e.g. Gibbs sampler) from scratch.  However these systems
+still have overhead of their own.
 
+This paper and accompanying source code provide a complete (small)
+example of a Bayesian data analysis with PyMC.  In addition to showing
+an example of the PyMC syntax necessary, I have also described the
+elements of my typical workflow in building, fitting, and validating a
+model, as well as some elements of test-driven software development
+and debugging PyMC code with the Python debugger.
+
+Wikipedia gives a concise introduction to the topic which this example data analysis will investigate, the so-called \emph{Fertility-development controversy} \ref{FertilityDevelopmentControversy}:
+\begin{quote}
+The relationship between the total fertility rate (TFR) and
+socio-economic development, which is measured by the human development
+index (HDI), is the subject of debate in social sciences.
+
+The novelty of this new and on-going debate is to seek a statistically
+significant linkage between socio-economic development and total
+fertility rate, rather than to examine a more conventional
+relationship between fertility and per capita income level, as
+discussed in Demographic-economic paradox.
+
+More importantly, the debate has revolved around the fundamental
+question in the demographic transition whether there could exist a
+so-called ``Fertility J-curve'' in which the fertility declines would
+rebound after a certain level (i.e., a threshold) of socio-economic
+development.
+
+Conventional wisdom in social sciences has been that developed
+countries tend to have lower fertility rates while fertility rates in
+developing nations are high. This means that declining fertility rates
+are attributed to advances in socio-economic development.
+
+In 2009, a group headed by Mikko Myrskylä of the Max Planck Institute
+for Demographic Research proposed that there exists a ``J-shaped''
+relationship between human fertility and development — i.e., that
+further advances in economic development can reverse the decline in
+fertility rate \ref{Myrskyla2009}.
+
+In an article published in Nature, Myrskylä et al. pointed out that
+“unprecedented increases” in social and economic development in the
+20th century had been accompanied by considerable declines in
+population growth rates and fertility. This negative association
+between human fertility and socio-economic development has been “one
+of the most solidly established and generally accepted empirical
+regularities in the social sciences”. The researchers used
+cross-sectional and longitudinal analyses to examine the relationship
+between total fertility rate (TFR) and the human development index
+(HDI).
+
+The main finding of the study was that, in highly developed countries
+with HDI above 0.9, further development halts the declining fertility
+rates. This means that the previously negative development-fertility
+association is reversed; the graph becomes J-shaped. Myrskylä et
+al. contend that there has occurred “a fundamental change in the
+well-established negative relationship between fertility and
+development as the global population entered the twenty-first
+century”.
+
+Some researchers doubt J-shaped relationship fertility and
+socio-economic development \ref{Luci2010, Furuoka2009}. For example,
+Fumitaka Furuoka employed a piecewise regression analysis to
+examine the relationship between total fertility rate and human
+development index. However, he found no empirical evidence to support
+the proposition that advances in development are able to reverse
+declining fertility rates.
+\end{quote}
+
+My initial investigations of this interesting controversy can be found
+on the Healthy Algorithms blog \ref{Flaxman2009}.
 
 %%%%%%%%%%%%%%%%%%
 %% Methods
@@ -271,11 +332,32 @@
 %% including a power calculation if appropriate.
 
 \section*{Methods}
-  \subsection*{Methods sub-heading for this section}
-    Text for this sub-section \ldots
+  \subsection*{PyMC project structure}
+  My template for a Bayesian data analysis with PyMC separates the
+  source code into 4 Python files, which do not correspond precisely
+  to the four stages of Bayesian data analysis: data preparation,
+  model building, model fitting, model checking.
 
-  \subsection*{Another methods sub-heading for this section}
-    Text for this sub-section \ldots
+  The Python files in the src directory of the project template are the following:
+\begin{itemize}
+\item data.py, where I store all of the data preparation code;
+\item models.py, where I store both the model building code and (at
+  least initially) the model fitting code
+\item graphics.py, where I store all of the code for graphically checking the model fits and producing visual output of model results
+\item tests.py, which holds automatic tests for anything at all customized in the code
+\end{itemize}
+
+  \subsection*{Data Preparation in data.py}
+  File src/data.py holds all of the code for loading and preparing the
+  data; it is relatively simple, although it could be simpler.  An
+  important task for future labor is building a minimal set of data
+  manipulation tools for Python that provides each routine task for
+  tabular data manipulaion in a single easy-to-read command.
+
+  For example, the 3 lines necessary to prepare the HDI data are three
+  times too many lines, and more than three times too complicated.
+  STATA and R provide single-line commands to accomplish this common
+  task of translating from a panel data format to an extensive form.
 
   \subsection*{Yet another sub-heading for this section}
     Text for this sub-section \ldots

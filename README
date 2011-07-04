@@ -1,6 +1,15 @@
-Project Name
-------------
+pymc-example-tfr_hdi
+--------------------
 
-Project Description
+This full example of a PyMC project compares several ways of modeling
+the relationship between Total Fertility Rate (TFR) and Human
+Development Index (HDI), the subject of the "Fertility-development
+controversy" [1].
 
+It is a useful example, and additional background details are
+described in the Healthy Algorithms blog [2].
+
+[1] http://en.wikipedia.org/wiki/Fertility-development_controversy
+
+[2] http://healthyalgorithms.wordpress.com/2009/08/25/mcmc-in-python-pymc-for-bayesian-model-selection/
 
