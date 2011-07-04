@@ -7,8 +7,9 @@ matplotlib.use("AGG")
 import models
 
 class TestClass:
-   def setUp(self):
-      pass
+    def setUp(self):
+        pass
 
-   def test_models(self):
-       assert False, 'Write test, fail, write code, pass'
+    def test_data(self):
+        import data
+        assert len(data.all_data) > 0, 'Should have some rows of data'
