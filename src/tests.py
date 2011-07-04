@@ -21,3 +21,7 @@ class TestClass:
 
     def test_graphics(self):
         graphics.plot_all_data()
+
+if __name__ == '__main__':
+    import nose
+    nose.run()
