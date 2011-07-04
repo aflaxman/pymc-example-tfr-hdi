@@ -3,8 +3,13 @@ import pylab as pl
 all = pl.csv2rec('nature08230-s2.csv')
 
 years = range(1975, 2006)
-hdi = [d['hdi%d'%y] for y in years for d in all]
-hdi = pl.ma.masked_array(hdi, pl.isnan(hdi))
-
-tfr = [d['tfr%d'%y] for y in years for d in all]
-tfr = pl.ma.masked_array(tfr, pl.isnan(tfr))
+hdi = []
+tfr = []
+for row in all:
+    for y in years:
+        if pl.isnan(row['hdi%d'%y]) or pl.isnan(row['tfr%d'%y]):
+            continue
+        hdi.append(row['hdi%d'%y])
+        tfr.append(row['tfr%d'%y])
+hdi = pl.array(hdi)
+tfr = pl.array(tfr)
