@@ -13,7 +13,8 @@ def linear():
     @mc.deterministic
     def y_pred(beta=beta, X=data.hdi):
         return beta[0] + beta[1]*X
-    y_obs = mc.Normal('y_obs', value=data.tfr, mu=y_pred, tau=sigma**-2)
+    y_obs = mc.Normal('y_obs', value=data.tfr,
+                      mu=y_pred, tau=sigma**-2)
 
     return vars()
 

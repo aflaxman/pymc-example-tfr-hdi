@@ -55,6 +55,11 @@
 %\usepackage[latin1]{inputenc} %UNIX support if unicode package fails
 \urlstyle{rm}
 
+
+\usepackage{amsmath}
+\def\TFR{\operatorname{TFR}}
+\def\HDI{\operatorname{HDI}}
+
  
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
@@ -376,8 +381,16 @@ tfr = pl.ma.masked_array(tfr, pl.isnan(tfr))
 \caption{Listing of src/data.py}
 \label{src/data.py}
 \end{figure}
-  \subsection*{Yet another sub-heading for this section}
-    Text for this sub-section \ldots
+
+  \subsection*{Model Building}
+I started with the simplest relationship between HDI and TFR, which is
+ a "linear model" that posits for a given increment in HDI there is a
+ corresponding decrement in TFR, and formalizes this according to the
+ equations
+\begin{align*}
+\TFR_i &= \beta_0 + \beta_1 \HDI_i + \epsilon_i\\
+\epsilon_i &\sim N(0, \sigma^2)
+\end{align*}
 
 
  
