@@ -54,6 +54,7 @@
 %\usepackage[applemac]{inputenc} %applemac support if unicode package fails
 %\usepackage[latin1]{inputenc} %UNIX support if unicode package fails
 \urlstyle{rm}
+
  
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
@@ -349,16 +350,32 @@ on the Healthy Algorithms blog \ref{Flaxman2009}.
 
   \subsection*{Data Preparation in data.py}
   File src/data.py holds all of the code for loading and preparing the
-  data; it is relatively simple, although it could be simpler.  An
-  important task for future labor is building a minimal set of data
-  manipulation tools for Python that provides each routine task for
-  tabular data manipulaion in a single easy-to-read command.
+  data; it is relatively simple, although it could be simpler
+  (Fig.~\ref{src/data.py}).  An important task for future labor is
+  building a minimal set of data manipulation tools for Python that
+  provides each routine task for tabular data manipulaion in a single
+  easy-to-read command.
 
   For example, the 3 lines necessary to prepare the HDI data are three
   times too many lines, and more than three times too complicated.
   STATA and R provide single-line commands to accomplish this common
   task of translating from a panel data format to an extensive form.
+\begin{figure}
+  \begin{verbatim}
+import pylab as pl
 
+all_data = pl.csv2rec('nature08230-s2.csv')
+
+years = range(1975, 2006)
+hdi = [d['hdi%d'%y] for y in years for d in all_data]
+hdi = pl.ma.masked_array(hdi, pl.isnan(hdi))
+
+tfr = [d['tfr%d'%y] for y in years for d in all_data]
+tfr = pl.ma.masked_array(tfr, pl.isnan(tfr))
+\end{verbatim}
+\caption{Listing of src/data.py}
+\label{src/data.py}
+\end{figure}
   \subsection*{Yet another sub-heading for this section}
     Text for this sub-section \ldots
 
