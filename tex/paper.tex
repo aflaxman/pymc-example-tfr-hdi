@@ -135,7 +135,7 @@
 %%                                          %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{An example Bayesian data analysis with PyMC:\\The TFR-HDI controversy}
+\title{The TFR-HDI controversy: an example Bayesian data analysis with PyMC}
  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                          %%
@@ -200,7 +200,7 @@
         % Do not use inserted blank lines (ie \\) until main body of text.
         \paragraph*{Background:} Bayesian data analysis is an important tool, but has a steep learning curve. This document provides a rapid introduction through a complete example.
       
-        \paragraph*{Methods:} I replicated several analyses of the relationship between Human Development Index (HDI) and Total Fertility Rate (TFR) using the PyMC package for Python.
+        \paragraph*{Methods:} I replicated part of an analyses of the relationship between Human Development Index (HDI) and Total Fertility Rate (TFR) using the PyMC package for Python.
 
         \paragraph*{Results:} PyMC provided a simple framework for replicating and extending statistical data analysis in a Bayesian framework.
 
@@ -256,17 +256,17 @@
 
 \section*{Background}
 Bayesian data analysis is an important tool, but it has a steep
-learning curve.  MCMC packages like BUGS and PyMC can reduce the
-barrier to entry significantly, by removing the burden of coding an
-MCMC sampler (e.g. Gibbs sampler) from scratch.  However these systems
-still have overhead of their own.
+learning curve.  MCMC packages like BUGS \ref{BUGS} and PyMC
+\ref{PyMC} can reduce the barrier to entry significantly, by removing
+the burden of coding an MCMC sampler (e.g. Gibbs sampler) from
+scratch.  However these systems still have overhead of their own.
 
-This paper and accompanying source code provide a complete (small)
-example of a Bayesian data analysis with PyMC.  In addition to showing
-an example of the PyMC syntax necessary, I have also described the
-elements of my typical workflow in building, fitting, and validating a
-model, as well as some elements of test-driven software development
-and debugging PyMC code with the Python debugger.
+This paper and accompanying source code \ref{Code} provide a complete
+(small) example of a Bayesian data analysis with PyMC.  In addition to
+showing an example of the PyMC syntax necessary, I have also described
+the elements of my typical workflow in building, fitting, and
+validating a model, as well as some elements of test-driven software
+development and debugging PyMC code with the Python debugger.
 
 Wikipedia gives a concise introduction to the topic which this example data analysis will investigate, the so-called \emph{Fertility-development controversy} \ref{FertilityDevelopmentControversy}:
 \begin{quote}
@@ -339,10 +339,11 @@ on the Healthy Algorithms blog \ref{Flaxman2009}.
 
 \section*{Methods}
   \subsection*{PyMC project structure}
-  My template for a Bayesian data analysis with PyMC separates the
-  source code into 4 Python files, which do not correspond precisely
-  to the four stages of Bayesian data analysis: data preparation,
-  model building, model fitting, model checking.
+  My template for a Bayesian data analysis with PyMC
+  \ref{PyMC-template} separates the source code into 4 Python files,
+  which do not correspond precisely to the four stages of Bayesian
+  data analysis: data preparation, model building, model fitting,
+  model checking.
 
   The Python files in the src directory of the project template are the following:
 \begin{itemize}
@@ -366,7 +367,7 @@ on the Healthy Algorithms blog \ref{Flaxman2009}.
   STATA and R provide single-line commands to accomplish this common
   task of translating from a panel data format to an extensive form.
 \begin{figure}
-  \begin{verbatim}
+\begin{verbatim}
 import pylab as pl
 
 all_data = pl.csv2rec('nature08230-s2.csv')
@@ -384,13 +385,31 @@ tfr = pl.ma.masked_array(tfr, pl.isnan(tfr))
 
   \subsection*{Model Building}
 I started with the simplest relationship between HDI and TFR, which is
- a "linear model" that posits for a given increment in HDI there is a
- corresponding decrement in TFR, and formalizes this according to the
- equations
+a ``linear model'' that posits for a given increment in HDI there is a
+corresponding decrement in TFR, and formalizes this according to the
+equations
 \begin{align*}
+\text{Linear Model (LM):}\qquad
 \TFR_i &= \beta_0 + \beta_1 \HDI_i + \epsilon_i\\
 \epsilon_i &\sim N(0, \sigma^2)
 \end{align*}
+
+Implementing this in PyMC may seem hardly worth the trouble, since
+this sort of ordinary least squares model has a simple closed-form
+solution, as well as numerous implementations, like the regress
+command in STATA.  It will be clear why this is worthwhile after
+modifying the systematic part to yield a (slightly) more complicated
+nonlinear model.
+
+\begin{align*}
+\text{Nonlinear Model (NM):}\qquad
+\TFR_i &= \beta_0 + \beta_1 \HDI_i + \beta_2(\HDI_i - \gamma)^+ \ + \epsilon_i,\\
+\epsilon_i &\sim N(0, \sigma^2),
+\end{align*}
+where $(\HDI_i - \gamma)^+$ equals $\HDI_i - \gamma$ if this quantity
+is positive, and $0$ otherwise.
+
+
 
 
  
