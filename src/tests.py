@@ -19,6 +19,10 @@ class TestClass:
         vars = models.linear()
         assert 'beta' in vars
 
+    def test_nonlinear_model(self):
+        vars = models.nonlinear()
+        assert 'gamma' in vars
+
     def test_graphics(self):
         graphics.plot_all_data()
 
