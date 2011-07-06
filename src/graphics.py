@@ -31,12 +31,12 @@ def plot_linear_model(m):
     beta = m.beta.stats()['mean']
     tfr = beta[0] + beta[1]*hdi
     pl.plot(hdi, tfr,
-            color='purple', linewidth=2,
+            color='purple', linewidth=5,
             label='Linear')
     decorate_plot()
 
 
-def plot_nonlinear_model(m):
+def plot_nonlinear_model(m, color='green', label='Nonlinear'):
     X = pl.arange(0., 1., .01)
     tfr_trace = []
     for beta, gamma in zip(m.beta.trace(), m.gamma.trace()):
@@ -46,8 +46,8 @@ def plot_nonlinear_model(m):
         tfr_trace.append(y)
 
     pl.plot(X, pl.mean(tfr_trace, axis=0),
-            color='green', linewidth=2,
-            label='Nonlinear')
+            color=color, linewidth=5,
+            label=label)
     decorate_plot()
 
 
