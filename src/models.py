@@ -55,20 +55,3 @@ def fit(vars):
     m.sample(iter=10000, burn=5000, thin=5)
     return m
 
-
-if __name__ == '__main__':
-    reload(data)
-    ml = fit_linear()
-    mn = fit(nonlinear())
-
-    import graphics
-    reload(graphics)
-    reload(graphics.data)
-
-    pl.clf()
-
-    graphics.plot_all_data()
-    graphics.plot_linear_model(ml)
-    graphics.plot_nonlinear_model(mn)
-
-    pl.show()
