@@ -17,3 +17,5 @@ mc.Matplot.plot(m, path='../tex/ex4')
 
 # TODO: look at joint posterior distribution of beta_0 and beta_1 as
 # well as beta_2 and gamma
+
+# TODO: calculate posterior probability that slope becomes positive

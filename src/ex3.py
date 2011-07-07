@@ -9,6 +9,7 @@ m1 = models.fit(models.nonlinear())
 m2 = models.fit(models.nonlinear())
 
 # display results
+pl.figure()
 graphics.plot_2005_data()
 graphics.plot_nonlinear_model(m1, color='g', label='Replicate 1')
 pl.axis([.8, .99, 1., 3.])
