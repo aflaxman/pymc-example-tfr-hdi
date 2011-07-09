@@ -32,7 +32,7 @@ def fit_linear():
 
 
 def nonlinear():
-    beta = mc.Uninformative('beta', value=[0., 0., 0.])
+    beta = mc.Normal('beta', mu=0., tau=10.**-1, value=[0., 0., 0.])
     gamma = mc.Normal('gamma', mu=.86, tau=.05**-2,
                       value=.86)
     sigma = mc.Uniform('sigma', lower=0., upper=100., value=1.)
@@ -52,6 +52,7 @@ def fit(vars):
     mc.MAP(vars).fit(method='fmin_powell')
 
     m = mc.MCMC(vars)
+    m.use_step_method(mc.Metropolis, m.beta)
     m.sample(iter=20000, burn=10000, thin=10)
     return m
 

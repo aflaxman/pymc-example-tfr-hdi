@@ -2,7 +2,7 @@ import pylab as pl
 
 all = pl.csv2rec('nature08230-s2.csv')
 
-years = [2005] #range(1975, 2006)
+years = [1975, 2005] #range(1975, 2006)
 hdi = []
 tfr = []
 for row in all:

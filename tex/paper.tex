@@ -403,8 +403,9 @@ nonlinear model.
 
 \begin{align*}
 \text{Nonlinear Model (NM):}\qquad
-\TFR_i &= \beta_0 + \beta_1 \HDI_i + \beta_2(\HDI_i - \gamma)^+ \ + \epsilon_i,\\
-\epsilon_i &\sim N(0, \sigma^2),
+\TFR_i &= \beta_0 + \beta_1 \HDI_i + \\
+&\qquad \qquad\beta_2(\HDI_i - \gamma)^+ \ + \epsilon_i\\
+\epsilon_i &\sim N(0, \sigma^2)
 \end{align*}
 where $(\HDI_i - \gamma)^+$ equals $\HDI_i - \gamma$ if this quantity
 is positive, and $0$ otherwise.

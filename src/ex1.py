@@ -12,8 +12,8 @@ m = mc.MCMC(vars)
 m.sample(iter=10000, burn=5000, thin=5)
 
 # display results
-pl.figure()
-graphics.plot_2005_data()
+pl.figure(figsize=(12,9))
+graphics.plot_all_data()
 graphics.plot_linear_model(m)
 
 pl.savefig('../tex/ex1.png')
