@@ -37,3 +37,13 @@ pl.savefig('../tex/ex5_a.png')
 pl.figure(figsize=(12,9))
 graphics.plot_predicted_data(y_pred, [.7, .99, .1, 5.])
 pl.savefig('../tex/ex5_b.png')
+
+# plot residuals
+pl.figure(figsize=(12,9))
+y_err = mcmc.y_obs.value - mcmc.y_mean.stats()['mean']
+pl.hlines([0], 0, 1, linewidth=3, linestyle='dashed')
+pl.plot(data.hdi2005, y_err, 'gs', mew=0, ms=10)
+graphics.decorate_plot()
+pl.ylabel('Residual ($TFR_{obs}-TFR_{expect}$)', fontsize=20)
+pl.axis([.3, .99, -3, 3])
+pl.savefig('../tex/ex5_c.png')

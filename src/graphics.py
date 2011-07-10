@@ -117,13 +117,22 @@ def plot_predicted_sample(x, y_pred):
 
 def plot_predicted_data(y_pred, bounds=[.3, .99, .1, 8.]):
     pl.subplot(3,1,1)
-    plot_predicted_distribution(data.hdi2005, y_pred)
     plot_2005_data()
     decorate_plot()
+    pl.xlabel('')
+    pl.ylabel('')
     pl.axis(bounds)
 
-    for i in range(2):
-        pl.subplot(3,1,i+2)
-        plot_predicted_sample(data.hdi2005, y_pred)
-        decorate_plot()
-        pl.axis(bounds)
+    pl.subplot(3,1,2)
+    plot_predicted_sample(data.hdi2005, y_pred)
+    decorate_plot()
+    pl.xlabel('')
+    pl.axis(bounds)
+
+    pl.subplot(3,1,3)
+    plot_predicted_sample(data.hdi2005, y_pred)
+    decorate_plot()
+    pl.ylabel('')
+    pl.axis(bounds)
+
+    pl.subplots_adjust(hspace=0.)
