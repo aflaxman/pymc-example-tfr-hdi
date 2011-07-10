@@ -6,12 +6,16 @@ import graphics
 
 # make and fit model twice
 vars = models.nonlinear()
+vars['gamma'].value = .95
 vars['beta'].value = [10, -10, 15]  # carefully choosen initial value, for demonstration purposes only
-m1 = models.fit(vars)
+m1 = mc.MCMC(vars)
+m1.sample(iter=20000, burn=10000, thin=10)
 
 vars = models.nonlinear()
+vars['gamma'].value = .95
 vars['beta'].value = [8, -8, 10]  # as above
-m2 = models.fit(vars)
+m2 = mc.MCMC(vars)
+m2.sample(iter=20000, burn=10000, thin=10)
 
 # display results
 pl.figure(figsize=(12,9))

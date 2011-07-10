@@ -6,16 +6,14 @@ import graphics
 
 # make model
 vars = models.nonlinear()
-vars['beta'].value = [10, -10, 15]  # carefully choosen initial value, for demonstration purposes only
-# fit model with MCMC, starting with MAP initial value
-mc.MAP(vars).fit(method='fmin_powell', verbose=1)
+#vars['beta'].value = [10, -9, 15]  # carefully choosen initial value, for demonstration purposes only
 
 m = mc.MCMC(vars)
-m.sample(iter=10000, burn=5000, thin=5)
+m.sample(iter=20000, burn=10000, thin=10)
 
 # display results
 pl.figure(figsize=(12,9))
-graphics.plot_all_data()
+graphics.plot_2005_data()
 graphics.plot_nonlinear_model(m)
 
 pl.savefig('../tex/ex2.png')

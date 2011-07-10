@@ -88,6 +88,7 @@
 \setlength{\oddsidemargin}{0cm} 
 \setlength{\textwidth}{16.5cm}
 \setlength{\columnsep}{0.6cm}
+\setlength{\parskip}{0.2cm}
 
 \newboolean{publ}
 
@@ -399,7 +400,42 @@ this sort of ordinary least squares model has a simple closed-form
 solution, as well as numerous implementations, like the regress
 command in STATA.  It will be clear why this is worthwhile after
 modifying the systematic part to yield a (slightly) more complicated
-nonlinear model.
+nonlinear model.  The code to implement it appears in
+Fig.~\ref{src/linear model}.
+\begin{figure}
+\begin{verbatim}
+import pylab as pl
+import pymc as mc
+
+import data
+
+
+def linear():
+    beta = mc.Uninformative('beta', value=[0., 0.])
+    sigma = mc.Uniform('sigma', lower=0., upper=100., value=1.)
+
+    @mc.deterministic
+    def y_pred(beta=beta, X=data.hdi):
+        return beta[0] + beta[1]*X
+    y_obs = mc.Normal('y_obs', value=data.tfr,
+                      mu=y_pred, tau=sigma**-2,
+                      observed=True)
+
+    return vars()
+
+
+def fit_linear():
+    vars = linear()
+
+    mc.MAP(vars).fit(method='fmin_powell')
+
+    m = mc.MCMC(vars)
+    m.sample(iter=10000, burn=5000, thin=5)
+    return m
+\end{verbatim}
+\caption{Listing of code to implement and fit linear model in PyMC}
+\label{src/linear model}
+\end{figure}
 
 \begin{align*}
 \text{Nonlinear Model (NM):}\qquad
@@ -411,6 +447,25 @@ where $(\HDI_i - \gamma)^+$ equals $\HDI_i - \gamma$ if this quantity
 is positive, and $0$ otherwise.
 
 
+Some exercises are to implement models for the following:
+\begin{align*}
+\text{Alt Linear Model:}\qquad
+\log\TFR_i &= \beta_0 + \beta_1 \log(1-\HDI_i) + \epsilon_i\\
+\epsilon_i &\sim N(0, \sigma^2)
+\end{align*}
+
+\begin{align*}
+\text{Alt Linear Model 2:}\qquad
+\TFR_i &= \beta_0 + \beta_1 \HDI_i + \beta_2 \HDI_i^2 + \epsilon_i\\
+\epsilon_i &\sim N(0, \sigma^2)
+\end{align*}
+
+\begin{align*}
+\text{Robust Linear Model:}\qquad
+\TFR_i &= \beta_0 + \beta_1 \HDI_i + \epsilon_i\\
+\epsilon_i &\sim L(0, \sigma^2)
+\end{align*}
+where $L$ is the Laplace distribution TK.
 
 
  
