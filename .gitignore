@@ -6,3 +6,4 @@
 *.log
 *.bbl
 *.png
+src/nonlinear*
