@@ -12,10 +12,10 @@ def linear():
     sigma = mc.Uniform('sigma', lower=0., upper=100., value=1.)
 
     @mc.deterministic
-    def y_pred(beta=beta, X=data.hdi2005):
+    def y_mean(beta=beta, X=data.hdi2005):
         return beta[0] + beta[1]*X
     y_obs = mc.Normal('y_obs', value=data.tfr2005,
-                      mu=y_pred, tau=sigma**-2,
+                      mu=y_mean, tau=sigma**-2,
                       observed=True)
 
     return vars()
